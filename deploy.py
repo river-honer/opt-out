@@ -11,19 +11,18 @@ app = Flask(__name__)
 m = Model()
 
 
-@app.route("/predict")
-def generate_sentiment_score():
+@app.route("/predict", methods=['POST'])
+def sentiment_score():
     """Returns the sentiment score of the parsed sentence.
 
     Returns:
         score (int) : The sentiment score of the sentence. 1 - abusive, 0 - not abusive.
     """
-
-    sentence = request.args.get("sentence")
+    sentences = request.get_json()['sentences']
 
     backend.clear_session()
 
-    score = m.predict(urllib.parse.unquote(sentence), os.getcwd() + "/saved_data/models/model_120.h5",
+    score = m.predict(sentences, os.getcwd() + "/saved_data/models/model_120.h5",
               "/data/DataTurks/dump.csv", 'content', 10000)
     return jsonify(score=score)
 
