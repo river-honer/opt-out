@@ -1,8 +1,8 @@
 {
 
   "manifest_version": 2,
-  "name": "Stop-it",
-  "version": "1.0",
+  "name": "opt out",
+  "version": "1.0.0",
 
   "description": "Adds a browser action icon to the toolbar. Click the button to substitute sexually aggressive comments with something nicer.",
   "homepage_url": "https://github.com/malteserteresa/stop-it",
@@ -12,7 +12,11 @@
 
   "browser_action": {
     "default_icon": "icons/stop-32.png",
-    "default_title": "Stop-it"
+    "default_title": "opt out"
+  },
+
+  "background": {
+    "scripts": ["src/replace.js"]
   },
 
   "content_scripts": [

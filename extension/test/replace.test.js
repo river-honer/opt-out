@@ -1,4 +1,6 @@
-var jsdom = require('mocha-jsdom')
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
 const {expect} = require('chai');
 const {
   getTweet,
@@ -7,16 +9,37 @@ const {
 
 } = require('../src/replace');
 
+const dom = new JSDOM(`<div class="stream"><ol> 
+<li>
+<div class="tweet">
+<div class="content">
+<div class="js-tweet-text-container">
+<p class="TweetTextSize  js-tweet-text tweet-text">Test sentence 1.<a class="twitter-hashtag pretty-link js-nav" data-query-source="hashtag_click"><s>#</s><strong><strong>TestHashTag1</strong></strong></a></p>
+</div>
+<div class="stream-item-footer">
+</li>
+<li>
+<div class="tweet">
+<div class="content">
+<div class="js-tweet-text-container">
+<p class="TweetTextSize  js-tweet-text tweet-text">Test sentence 2.<a class="twitter-hashtag pretty-link js-nav"  data-query-source="hashtag_click"><s>#</s><strong><strong>TestHashTag2</strong></strong></a></p>
+</div>
+<div class="stream-item-footer">
+
+</li>
+</ol>`);
+
+
+
+
 describe('replace', () => {
 
-    jsdom()
+    
 
     describe('Find elements containing tweets and replace them with something else.', () => {
       it('returns a tweet', () => {
-        var div = document.createElement('div')
-        expect(div.nodeName).to.equal('DIV')
-        expect(getTweet()).to.equal();
-        expect(getTweet()).to.equal();
+        expect(getTweet(dom.window.document)[0]).to.equal("Test sentence 1.#TestHashTag1");
+        expect(getTweet(dom.window.document)[1]).to.equal("Test sentence 2.#TestHashTag2");
       });
       it('returns a score', () => {
         expect(getSentimentScore()).to.equal();
