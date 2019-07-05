@@ -16,13 +16,15 @@
   },
 
   "background": {
-    "scripts": ["src/replace.js"]
+    "scripts": ["src/background.js"]
   },
 
   "content_scripts": [
     {
-      "matches": ["*://www.twitter.com/*", "*://www.facebook.com/*"],
-      "js": ["src/replace.js"]
+      "matches": ["*://twitter.com/*"],
+      "js": ["src/content.js"]
     }
-   ]
+   ],
+
+   "permissions": ["*://twitter.com/*", "activeTab"]
 }
