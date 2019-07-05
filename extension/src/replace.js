@@ -16,16 +16,25 @@ function getTweet(d){
  * @returns
  */
 const loadPage = async() => {
-  console.log("HERE")
-  const response = await fetch("http://127.0.0.1:5000/predict", {
+  
+  tweets =  [ "@j_kloiber Hey my love, do you reckon we could hold a workshop on the 5th July too?","Bitch suck dick", "Hi! I’m unfortunately not around that day... sorry! (Let me see if I can figure something out with the keys..)", "Hey my love, any news on the 5th?", "@j_kloiber Hey my love, do you reckon we could hold a workshop on the 5th July too?", "Hi! I’m unfortunately not around that day... sorry! (Let me see if I can figure something out with the keys..)", "did i mention you are the best?!", "@j_kloiber Hey my love, do you reckon we could hold a workshop on the 5th July too?", "Hi! I’m unfortunately not around that day... sorry! (Let me see if I can figure something out with the keys..)"]
+  for (i = 0; i< tweets.length; i++) { 
+  console.log(tweets[i])  
+  var resp = await fetch("https://127.0.0.1:5000/predict", {
     method: 'post',
-    body: { "sentences": "test" },
+    body: JSON.stringify({ "sentences": tweets[i] }),
     headers:{
-      'Content-type': 'application/json'
+      'Content-Type': 'application/json',
     }
-  }); // Call the fetch function passing the url of the API as a parameter
-  const myJson = await response.json();
-  console.log(myJson)
+  }) 
+
+  const score = await resp.json();
+
+  tweet[i] = modifyHatefulTweet(score['score'], tweets[i])
+
+  }
+  console.log(tweets[1])
+
   console.log("NOW HERE")
   
 }
@@ -36,14 +45,18 @@ const loadPage = async() => {
  * @param
  * @returns
  */
-function modifyHatefulTweet() {
+function modifyHatefulTweet(score, tweet) {
+
+  if (score === 1) { tweet = "HARASSING";   console.log("in modify"); console.log(tweet); return tweet;}
 
 }
 
+
+tweet = "I like you" // will eventually be getTweet
 //console.log(getTweet(document))
 document.addEventListener("DOMContentLoaded", loadPage)
 
-  module.exports = {
+module.exports = {
     getTweet,
     getSentimentScore,
     modifyHatefulTweet

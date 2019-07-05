@@ -21,7 +21,6 @@ def sentiment_score():
     Returns:
         score (int) : The sentiment score of the sentence. 1 - abusive, 0 - not abusive.
     """
-    print("I'M HERE")
     sentences = request.get_json()['sentences']
 
     backend.clear_session()
@@ -34,4 +33,4 @@ def sentiment_score():
 
 
 if __name__ == "__main__":
-    app.run(ssl_context='adhoc')
+    app.run(ssl_context=('cert.pem', 'key.pem'))
