@@ -1,3 +1,4 @@
+
 /**
  * Retrieves the tweets
  *
@@ -6,8 +7,17 @@
  */
 function getTweets(){
   tweetStream = document.querySelector('.stream')
-  return Array.from(tweetStream.querySelectorAll('.tweet')).map(t => t.querySelector('.tweet-text').textContent);
+  return Array.from(tweetStream.querySelectorAll('.tweet')).map(t => t.querySelector('.tweet-text'));
 }
+
+function handleResponse(message) {
+  console.log(`Message from the background script:  ${message.response}`);
+}
+
+function handleError(error) {
+  console.log(`Error: ${error}`);
+}
+
 
 /**
  * Makes an REST call to and returns the result from the call
@@ -20,21 +30,21 @@ const loadPage = async() => {
   
   tweets = getTweets();
 
-  //tweets = [tweets[0]];
+  tweets = [tweets[0]];
 
   for (i = 0; i< tweets.length; i++) { 
     console.log("We are inside LOAD PAGE")
-    response = browser.runtime.sendMessage({"tweetText":tweets[i]})
+    
+    const response = browser.runtime.sendMessage({"tweetText":tweets[i].textContent})
+    
     console.log("foo")
-    console.log(response)
-    const score = await response;
-
- // tweet[i] = modifyHatefulTweet(score['score'], tweets[i])
+    const score = (await response).response.score;
+    console.log(score)
+    modifyHatefulTweet(score, tweets[i])
 
   }
-  console.log(tweets[1])
 
-  console.log("NOW HERE")
+  console.log("END of CONTENT SCRIPT")
   
 }
 
@@ -47,7 +57,7 @@ const loadPage = async() => {
  */
 function modifyHatefulTweet(score, tweet) {
 
-  if (score === 1) { tweet = "HARASSING";   console.log("in modify"); console.log(tweet); return tweet;}
+  if (score === 0) { console.log("modifying"); tweet.style.color = "white";}
 
 }
 

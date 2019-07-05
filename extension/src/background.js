@@ -21,23 +21,19 @@ const getScore = async(tweetText) => {
   
 }
 
-async function handleMessage(request, sender, sendResponse) {
+ function handleMessage(request, sender, sendResponse) {
   console.log(`content script sent a message: ${request.tweetText}`);
-  score = await getScore(request["tweetText"])
-  console.log("score is:")
-  debugger
-  console.log(score)
-  sendResponse({response: "response from background script"});
+  
+  getScore(request["tweetText"]).then( (score) => {
+    console.log("score is:")
+    console.log(score)
+    sendResponse({response: score})
+  })
+ return true;
 }
+
 
 
 console.log("HERE I AM BACKGROUND")
 browser.runtime.onMessage.addListener(handleMessage);
 
-//document.addEventListener("DOMContentLoaded", loadPage)
-
-// module.exports = {
-//     getTweet,
-//     getSentimentScore,
-//     modifyHatefulTweet
-//  }
