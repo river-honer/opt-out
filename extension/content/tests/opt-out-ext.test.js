@@ -16,6 +16,7 @@ describe('opt-out-ext.js', () => {
         <div data-testid="tweet">
           <h1>Oh ya!</h1>
         </div>
+        
       `;
     });
   });
