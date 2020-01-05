@@ -52,6 +52,41 @@ const styleTweet = (element, selectedOption, sliderValue) => {
 };
 
 /**
+ * @description Removes images from tweet post
+ */
+const removeImagesFromPost = (node, slider) => {
+  if (slider === '0') return;
+  // Remove image
+  // Get all images in post node
+  const images = node.querySelectorAll('img');
+  for (const image of images) {
+    // If image is not profile image
+    if (!image.src.includes('profile_image')) {
+      const parentClassListLength = image.parentElement.classList.length;
+      // Create array of classes of image parent 
+      const classListArray = [...Array(parentClassListLength).keys()].reduce((acc, index) => {
+        const className = image.parentElement.classList.item(index);
+        acc = [...acc, className];
+        return acc;
+      }, []);
+      const classListString = classListArray.join(' ');
+      // Find parent node of image by it's class list
+      const liveImageParentDomList = node.getElementsByClassName(classListString);
+      console.log('liveImageParentDomList', liveImageParentDomList)
+      const domListLength = liveImageParentDomList.length;
+      console.log('domListLength', domListLength);
+      const parentElementList = [...Array(domListLength).keys()].map((index) => {
+        const element = liveImageParentDomList.item(index);
+        element.style.display = 'none';
+        console.log(element);
+        return element;
+      });
+      console.log(parentElementList);
+    }
+  }
+};
+
+/**
  * @description function which calls server for given node, and depending on the response,
  * applies pre-defined action
  * @param node
@@ -79,6 +114,7 @@ const checkText = (node) => {
       if (JSON.parse(xhr.response).predictions[0]) {
         node.classList.add('processed-true');
         styleTweet(tweetTextNode, option, slider);
+        removeImagesFromPost(node, slider);
       } else {
         node.classList.add('processed-false');
       }
